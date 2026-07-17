@@ -582,7 +582,7 @@ textarea{
 
     gap:20px;
 
-    padding:20px;
+    padding:18px 20px;
 
     margin-bottom:24px;
 
@@ -614,18 +614,6 @@ textarea{
     font-weight:600;
 
     color:var(--primary-dark);
-
-}
-
-.heroSummary{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:4px;
-
-    margin-top:18px;
 
 }
 
@@ -709,20 +697,6 @@ body.dark .companionInsight{
 .companionInsight.insightFade{
 
     animation:insightFade var(--duration-slow) var(--ease-standard);
-
-}
-
-#heroHeadline{
-
-    font-weight:700;
-
-    color:var(--text);
-
-}
-
-#heroText{
-
-    color:var(--text-light);
 
 }
 
@@ -2288,9 +2262,11 @@ body.dark .navItem.active{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+    /* Etwas größere Mindestbreite als Puffer für längere
+       deutsche Begriffe. */
+    grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
 
-    gap:16px;
+    gap:16px 14px;
 
     margin-bottom:8px;
 
@@ -2304,11 +2280,20 @@ body.dark .navItem.active{
 
     gap:4px;
 
+    /* Grid-/Flex-Items haben standardmäßig min-width:auto,
+       wodurch sie nie unter die intrinsische Breite ihres
+       Inhalts schrumpfen – bei langen deutschen Begriffen
+       ("Kürzester Schlaf", "Anzahl (30 Tage)") führte das zum
+       Überlappen mit der Nachbarkachel. min-width:0 erlaubt
+       dem Grid, die Kachel korrekt zu verkleinern und den Text
+       stattdessen umzubrechen. */
+    min-width:0;
+
 }
 
 .statMetric strong{
 
-    font-size:1.15rem;
+    font-size:1.1rem;
 
     font-weight:700;
 
@@ -2316,11 +2301,15 @@ body.dark .navItem.active{
 
     letter-spacing:-.01em;
 
+    overflow-wrap:break-word;
+
+    word-break:break-word;
+
 }
 
 .statMetric span{
 
-    font-size:.76rem;
+    font-size:.74rem;
 
     font-weight:600;
 
@@ -2328,7 +2317,15 @@ body.dark .navItem.active{
 
     text-transform:uppercase;
 
-    letter-spacing:.03em;
+    letter-spacing:.02em;
+
+    line-height:1.3;
+
+    overflow-wrap:break-word;
+
+    word-break:break-word;
+
+    hyphens:auto;
 
 }
 

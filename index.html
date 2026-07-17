@@ -230,18 +230,6 @@
             0 Monate
         </p>
 
-        <div class="heroSummary">
-
-            <span id="heroHeadline">
-                Willkommen 👶
-            </span>
-
-            <small id="heroText">
-                Lege deinen ersten Eintrag an.
-            </small>
-
-        </div>
-
     </div>
 
     <div
@@ -407,7 +395,7 @@
             Verlauf
         </h2>
 
-        <p data-i18n="timelineSubtitle">
+        <p id="timelineSubtitle">
             Alle Einträge
         </p>
 
@@ -423,6 +411,13 @@
     </button>
 
 </div>
+
+            <!-- Suche, Kategorie-Filter, Zeitraum-Filter: nur auf der
+                 eigenen "Verlauf"-Seite sichtbar. Auf der Startseite
+                 zeigt derselbe #timeline-Container stattdessen einen
+                 einfachen, ungefilterten 24-Stunden-Ausschnitt (siehe
+                 currentPage/updateTimelineHeader() in app.js). -->
+            <div id="timelineControls">
 
             <div class="searchField">
 
@@ -535,6 +530,8 @@
                     Anwenden
 
                 </button>
+
+            </div>
 
             </div>
 

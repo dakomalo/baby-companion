@@ -61,6 +61,10 @@ const translations = {
 
         timelineSubtitle: "Alle Einträge",
 
+        homeRecentTitle: "Letzte 24 Stunden",
+        homeRecentSubtitle: "Kürzliche Aktivität",
+        homeRecentEmptyState: "Noch keine Einträge in den letzten 24 Stunden.",
+
         timelineTitleAll: "Verlauf",
         timelineTitleSleep: "Verlauf · Schlaf",
         timelineTitleBreastfeeding: "Verlauf · Stillen",
@@ -179,11 +183,7 @@ const translations = {
         confirmDeleteEntry: "Eintrag wirklich löschen?",
         alertInvalidBackupFile: "Ungültige Backup-Datei.",
 
-        timeJustNow: "gerade eben",
-        timeMinutesAgo: "vor {n} Min.",
-        timeHoursAgo: "vor {n} Std.",
         timeYesterday: "gestern",
-        timeDaysAgo: "vor {n} Tagen",
 
         ageUnderOneMonth: "unter 1 Monat",
         ageOneMonth: "1 Monat",
@@ -193,8 +193,6 @@ const translations = {
         greetingMorning: "☀️ Guten Morgen",
         greetingDay: "🌤️ Guten Tag",
         greetingEvening: "🌙 Guten Abend",
-        heroWelcomeHeadline: "Willkommen 👶",
-        heroWelcomeText: "Lege deinen ersten Eintrag an.",
 
         insightMilestoneWeek1: "Eine Woche gemeinsam ❤️",
         insightMilestoneWeek2: "Heute ist dein Baby genau 2 Wochen alt.",
@@ -282,6 +280,10 @@ const translations = {
         filterHeight: "📏 Height",
 
         timelineSubtitle: "All entries",
+
+        homeRecentTitle: "Last 24 hours",
+        homeRecentSubtitle: "Recent activity",
+        homeRecentEmptyState: "No entries in the last 24 hours yet.",
 
         timelineTitleAll: "History",
         timelineTitleSleep: "History · Sleep",
@@ -401,11 +403,7 @@ const translations = {
         confirmDeleteEntry: "Really delete this entry?",
         alertInvalidBackupFile: "Invalid backup file.",
 
-        timeJustNow: "just now",
-        timeMinutesAgo: "{n} min ago",
-        timeHoursAgo: "{n} h ago",
         timeYesterday: "yesterday",
-        timeDaysAgo: "{n} days ago",
 
         ageUnderOneMonth: "under 1 month",
         ageOneMonth: "1 month",
@@ -415,8 +413,6 @@ const translations = {
         greetingMorning: "☀️ Good morning",
         greetingDay: "🌤️ Good afternoon",
         greetingEvening: "🌙 Good evening",
-        heroWelcomeHeadline: "Welcome 👶",
-        heroWelcomeText: "Add your first entry.",
 
         insightMilestoneWeek1: "One week together already ❤️",
         insightMilestoneWeek2: "Today your baby is exactly 2 weeks old.",
@@ -669,7 +665,7 @@ function bindLangSwitcher(){
    werden (siehe service-worker.js, CACHE_VERSION).
 ========================================================== */
 
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.3.1";
 
 /* ==========================================================
    TIMING / MATH CONSTANTS
@@ -2251,6 +2247,8 @@ function updateDashboard() {
 
 function showPage(page) {
 
+    currentPage = page;
+
     const hero =
         document.querySelector(".heroCard");
 
@@ -2300,6 +2298,8 @@ if (settings) {
             stats.style.display = "";
             timelineSection.style.display = "";
 
+            renderTimeline();
+
             document
                 .getElementById("navHome")
                 .classList.add("active");
@@ -2325,6 +2325,8 @@ if (settings) {
         case "timeline":
 
             timelineSection.style.display = "";
+
+            renderTimeline();
 
             document
                 .getElementById("navTimeline")
@@ -2370,11 +2372,8 @@ function updateProfile() {
 function updateHeroCard() {
 
     const greeting = document.getElementById("greeting");
-    const heroHeadline = document.getElementById("heroHeadline");
-    const heroText = document.getElementById("heroText");
-    const heroIcon = document.getElementById("heroIcon");
 
-    if (!greeting || !heroHeadline || !heroText || !heroIcon) {
+    if (!greeting) {
         return;
     }
 
@@ -2404,61 +2403,7 @@ function updateHeroCard() {
 
     updateCompanionInsight();
 
-    if (state.entries.length === 0) {
-
-        heroHeadline.textContent = t("heroWelcomeHeadline");
-        heroText.textContent = t("heroWelcomeText");
-        heroIcon.textContent = "👶";
-
-        return;
-
-    }
-
-    const latest = state.entries[0];
-
-    heroHeadline.textContent = getEntryTitle(latest);
-    heroText.textContent = formatRelativeTime(latest.createdAt);
-    heroIcon.textContent = getEntryIcon(latest.type);
-
 }
-function formatRelativeTime(timestamp) {
-
-    const diff = Date.now() - new Date(timestamp).getTime();
-
-    const minutes = Math.floor(diff / 60000);
-
-    if (minutes < 1) {
-
-        return t("timeJustNow");
-
-    }
-
-    if (minutes < 60) {
-
-        return t("timeMinutesAgo", { n: minutes });
-
-    }
-
-    const hours = Math.floor(minutes / 60);
-
-    if (hours < 24) {
-
-        return t("timeHoursAgo", { n: hours });
-
-    }
-
-    const days = Math.floor(hours / 24);
-
-    if (days === 1) {
-
-        return t("timeYesterday");
-
-    }
-
-    return t("timeDaysAgo", { n: days });
-
-}
-
 function calculateBabyAge(birthDate) {
 
     const birth = new Date(birthDate);
@@ -4233,6 +4178,24 @@ let customDateFrom = null;
 
 let customDateTo = null;
 
+// Welche Ansicht der (einzige, wiederverwendete) #timeline-Container
+// gerade bedient: "home" zeigt einen einfachen, ungefilterten Ausschnitt
+// der letzten 24 Stunden; "timeline" zeigt den vollen, filterbaren
+// Verlauf. Wird von showPage() gepflegt.
+let currentPage = "home";
+
+const HOME_RECENT_HOURS = 24;
+
+const HOME_RECENT_WINDOW_MS = HOME_RECENT_HOURS * 60 * 60 * 1000;
+
+function filterEntriesWithinWindow(entries, windowMs){
+
+    const cutoff = Date.now() - windowMs;
+
+    return entries.filter(entry => new Date(entry.createdAt).getTime() >= cutoff);
+
+}
+
 function buildSearchIndex(entry){
 
     return `${getCategoryName(entry.type)} ${getTimelineDetails(entry)} ${entry.note || ""}`.toLowerCase();
@@ -4288,6 +4251,12 @@ function filterEntriesByDateRange(entries){
 }
 
 function getFilteredEntries() {
+
+    if(currentPage === "home"){
+
+        return filterEntriesWithinWindow(state.entries, HOME_RECENT_WINDOW_MS);
+
+    }
 
     let entries = state.entries;
 
@@ -4395,38 +4364,84 @@ function createDayGroupHeader(group){
 
 }
 
-function renderTimeline() {
+function updateTimelineHeader(){
+
+    const titleElement = document.getElementById("timelineTitle");
+
+    const subtitleElement = document.getElementById("timelineSubtitle");
+
+    const controlsElement = document.getElementById("timelineControls");
+
+    const csvButton = document.getElementById("timelineCsvExport");
+
+    if(currentPage === "home"){
+
+        if(titleElement){
+
+            titleElement.textContent = t("homeRecentTitle");
+
+        }
+
+        if(subtitleElement){
+
+            subtitleElement.textContent = t("homeRecentSubtitle");
+
+        }
+
+        controlsElement?.classList.add("hidden");
+
+        csvButton?.classList.add("hidden");
+
+        return;
+
+    }
 
     const titles = {
 
-    all: t("timelineTitleAll"),
+        all: t("timelineTitleAll"),
+        sleep: t("timelineTitleSleep"),
+        breastfeeding: t("timelineTitleBreastfeeding"),
+        bottle: t("timelineTitleBottle"),
+        diaper: t("timelineTitleDiaper"),
+        weight: t("timelineTitleWeight"),
+        height: t("timelineTitleHeight")
 
-    sleep: t("timelineTitleSleep"),
+    };
 
-    breastfeeding: t("timelineTitleBreastfeeding"),
+    if(titleElement){
 
-    bottle: t("timelineTitleBottle"),
+        titleElement.textContent = titles[activeTimelineFilter];
 
-    diaper: t("timelineTitleDiaper"),
+    }
 
-    weight: t("timelineTitleWeight"),
+    if(subtitleElement){
 
-    height: t("timelineTitleHeight")
+        subtitleElement.textContent = t("timelineSubtitle");
 
-};
+    }
 
-document.getElementById("timelineTitle").textContent =
-    titles[activeTimelineFilter];
+    controlsElement?.classList.remove("hidden");
+
+    csvButton?.classList.remove("hidden");
+
+}
+
+function renderTimeline() {
+
+    updateTimelineHeader();
 
     const entries = getFilteredEntries();
 
     if (entries.length === 0) {
 
+        const emptyStateKey =
+            currentPage === "home" ? "homeRecentEmptyState" : "emptyStateNoEntries";
+
         timeline.innerHTML = `
 
             <div class="emptyState">
 
-                ${t("emptyStateNoEntries")}
+                ${t(emptyStateKey)}
 
             </div>
 
