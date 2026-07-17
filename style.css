@@ -31,7 +31,7 @@ html{
 
 body{
 
-    font-family:"Inter",sans-serif;
+    font-family:var(--font-system);
 
     background:var(--background);
 
@@ -113,6 +113,17 @@ body{
     --duration-fast:150ms;
     --duration-base:220ms;
     --duration-slow:380ms;
+
+    /* Schriftart: bewusst kein Google-Fonts-CDN (kein externer
+       Netzwerkaufruf, damit die App zu 100% offline lauffähig
+       bleibt). Stattdessen die native Systemschrift jeder
+       Plattform — SF Pro/San Francisco unter iOS/macOS, Segoe UI
+       unter Windows, Roboto unter Android — was zusätzlich sehr
+       gut zum "Apple/Notion/Linear"-Anspruch passt, da es exakt
+       wie eine native App wirkt. */
+    --font-system:
+        -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
 }
 body.dark{
@@ -2388,7 +2399,7 @@ body.dark .navItem.active{
 
     font-size:9px;
 
-    font-family:"Inter",sans-serif;
+    font-family:var(--font-system);
 
 }
 

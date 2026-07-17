@@ -165,8 +165,6 @@ const translations = {
         categoryDiaper: "Windel",
         categoryWeight: "Gewicht",
         categoryHeight: "Größe",
-        categoryTemperature: "Temperatur",
-        categoryMedicine: "Medikament",
         categoryNote: "Notiz",
 
         toastFillAllFields: "Bitte alle Felder ausfüllen.",
@@ -385,8 +383,6 @@ const translations = {
         categoryDiaper: "Diaper",
         categoryWeight: "Weight",
         categoryHeight: "Height",
-        categoryTemperature: "Temperature",
-        categoryMedicine: "Medicine",
         categoryNote: "Note",
 
         toastFillAllFields: "Please fill in all fields.",
@@ -665,7 +661,7 @@ function bindLangSwitcher(){
    werden (siehe service-worker.js, CACHE_VERSION).
 ========================================================== */
 
-const APP_VERSION = "1.3.1";
+const APP_VERSION = "1.4.0";
 
 /* ==========================================================
    TIMING / MATH CONSTANTS
@@ -4042,12 +4038,6 @@ function getCategoryName(type) {
         case "height":
             return t("categoryHeight");
 
-        case "temperature":
-            return t("categoryTemperature");
-
-        case "medicine":
-            return t("categoryMedicine");
-
         case "note":
             return t("categoryNote");
 
@@ -4584,14 +4574,6 @@ function getTimelineDetails(entry) {
         case "height":
 
             return `${entry.data.value || 0} cm`;
-
-        case "temperature":
-
-            return `${entry.data.value || 0} °C`;
-
-        case "medicine":
-
-            return `${entry.data.name || ""} ${entry.data.dose || ""}`.trim();
 
         default:
 

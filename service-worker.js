@@ -20,7 +20,7 @@ Cache-Strategie:
 ==========================================================
 */
 
-const CACHE_VERSION = "v1.3.1";
+const CACHE_VERSION = "v1.4.0";
 
 const CACHE_NAME = `baby-companion-${CACHE_VERSION}`;
 
