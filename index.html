@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+
+        Baby Companion
+
+    </title>
+
+    <!-- PWA / Manifest -->
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="theme-color" content="#8CBFA6">
+
+    <!-- iOS Homescreen -->
+
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <meta name="apple-mobile-web-app-title" content="Baby Companion">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+<body>
+
+<!-- ==========================================
+     SPLASH SCREEN
+========================================== -->
+
+<section
+
+    id="splashScreen"
+
+    class="screen active"
+
+>
+
+    <div class="splashContent">
+
+        <div class="logoCircle">
+
+            👶
+
+        </div>
+
+        <h1>
+
+            Baby Companion
+
+        </h1>
+
+        <p data-i18n="tagline">
+
+            Premium Baby Tracker
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+     ONBOARDING
+========================================== -->
+
+<section
+
+    id="onboarding"
+
+    class="screen hidden"
+
+>
+
+    <div class="card container">
+
+        <h2 data-i18n="onboardingTitle">
+
+            Willkommen 👋
+
+        </h2>
+
+        <p data-i18n="onboardingSubtitle">
+
+            Erstelle zuerst das Profil deines Babys.
+
+        </p>
+
+        <form
+
+            id="profileForm"
+
+        >
+
+            <div class="field">
+
+                <label for="babyName" data-i18n="labelName">
+
+                    Name
+
+                </label>
+
+                <input
+
+                    id="babyName"
+
+                    type="text"
+
+                    placeholder="z. B. Emma"
+
+                    data-i18n-placeholder="babyNamePlaceholder"
+
+                    required
+
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label for="birthDate" data-i18n="labelBirthDate">
+
+                    Geburtsdatum
+
+                </label>
+
+                <input
+
+                    id="birthDate"
+
+                    type="date"
+
+                    required
+
+                >
+
+            </div>
+
+            <button
+
+                class="primaryButton"
+
+                type="submit"
+
+                data-i18n="createBabyButton"
+
+            >
+
+                Baby anlegen
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+<!-- ==========================================
+     DASHBOARD
+========================================== -->
+
+<section
+
+    id="dashboard"
+
+    class="screen hidden"
+
+>
+
+    <main class="container">
+
+        <!-- HERO -->
+
+ <section class="heroCard">
+
+    <div class="heroContent">
+
+        <span
+            class="heroGreeting"
+            id="greeting"
+        >
+            Guten Morgen ☀️
+        </span>
+
+        <h2 id="welcomeTitle">
+            Emma
+        </h2>
+
+        <p
+            id="companionInsight"
+            class="companionInsight"
+            aria-live="polite"
+        ></p>
+
+        <p id="babyAge">
+            0 Monate
+        </p>
+
+        <div class="heroSummary">
+
+            <span id="heroHeadline">
+                Willkommen 👶
+            </span>
+
+            <small id="heroText">
+                Lege deinen ersten Eintrag an.
+            </small>
+
+        </div>
+
+    </div>
+
+    <div
+        class="heroIcon"
+        id="heroIcon"
+    >
+        👶
+    </div>
+
+</section>
+
+<div class="quickActions">
+
+    <button
+        class="quickAction"
+        data-type="sleep"
+        type="button">
+
+        <span class="quickIcon">😴</span>
+
+        <span class="quickLabel" data-i18n="quickSleep">Schlaf</span>
+
+    </button>
+
+    <button
+        class="quickAction"
+        data-type="breastfeeding"
+        type="button">
+
+        <span class="quickIcon">🤱</span>
+
+        <span class="quickLabel" data-i18n="quickBreastfeeding">Stillen</span>
+
+    </button>
+
+    <button
+        class="quickAction"
+        data-type="bottle"
+        type="button">
+
+        <span class="quickIcon">🍼</span>
+
+        <span class="quickLabel" data-i18n="quickBottle">Flasche</span>
+
+    </button>
+
+    <button
+        class="quickAction"
+        data-type="diaper"
+        type="button">
+
+        <span class="quickIcon">💩</span>
+
+        <span class="quickLabel" data-i18n="quickDiaper">Windel</span>
+
+    </button>
+
+</div>
+
+        <!-- ======================================
+             DASHBOARD STATS
+        ======================================= -->
+
+        <section class="statsGrid">
+
+    <article class="statCard">
+
+        <span class="statEmoji">😴</span>
+
+        <strong class="statValue" id="sleepValue">
+            0 h
+        </strong>
+
+        <span class="statLabel" data-i18n="statSleepToday">
+            Schlaf heute
+        </span>
+
+    </article>
+
+    <article class="statCard">
+
+        <span class="statEmoji">🤱</span>
+
+        <strong class="statValue" id="breastfeedingValue">
+            0×
+        </strong>
+
+        <span class="statLabel" data-i18n="statBreastfeedingToday">
+            Stillen heute
+        </span>
+
+    </article>
+
+    <article class="statCard">
+
+        <span class="statEmoji">🍼</span>
+
+        <strong class="statValue" id="bottleValue">
+            0 ml
+        </strong>
+
+        <span class="statLabel" data-i18n="statBottleToday">
+            Flasche heute
+        </span>
+
+    </article>
+
+    <article class="statCard">
+
+        <span class="statEmoji">💩</span>
+
+        <strong class="statValue" id="diaperValue">
+            0×
+        </strong>
+
+        <span class="statLabel" data-i18n="statDiaperToday">
+            Windeln heute
+        </span>
+
+    </article>
+
+    <article class="statCard">
+
+        <span class="statEmoji">⚖️</span>
+
+        <strong class="statValue" id="weightValue">
+            —
+        </strong>
+
+        <span class="statLabel" data-i18n="statLastWeight">
+            Letztes Gewicht
+        </span>
+
+    </article>
+
+    <article class="statCard">
+
+        <span class="statEmoji">📏</span>
+
+        <strong class="statValue" id="heightValue">
+            —
+        </strong>
+
+        <span class="statLabel" data-i18n="statLastHeight">
+            Letzte Größe
+        </span>
+
+    </article>
+
+</section>
+
+        <!-- ======================================
+             TIMELINE
+        ======================================= -->
+
+        <section class="timelineSection">
+
+            <div class="sectionHeader timelineSectionHeader">
+
+    <div>
+
+        <h2 id="timelineTitle">
+            Verlauf
+        </h2>
+
+        <p data-i18n="timelineSubtitle">
+            Alle Einträge
+        </p>
+
+    </div>
+
+    <button
+        id="timelineCsvExport"
+        class="secondaryButton"
+        type="button">
+
+        📊 CSV
+
+    </button>
+
+</div>
+
+            <div class="searchField">
+
+                <span class="searchIcon" aria-hidden="true">🔍</span>
+
+                <input
+                    id="timelineSearch"
+                    type="text"
+                    data-i18n-placeholder="searchPlaceholder"
+                    placeholder="Einträge durchsuchen..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+            <div class="timelineFilter" id="categoryFilter">
+
+    <button class="filterChip active" data-filter="all" data-i18n="filterAll">
+
+        Alle
+
+    </button>
+
+    <button class="filterChip" data-filter="sleep" data-i18n="filterSleep">
+
+        😴 Schlaf
+
+    </button>
+
+    <button class="filterChip" data-filter="breastfeeding" data-i18n="filterBreastfeeding">
+
+        🤱 Stillen
+
+    </button>
+
+    <button class="filterChip" data-filter="bottle" data-i18n="filterBottle">
+
+        🍼 Flasche
+
+    </button>
+
+    <button class="filterChip" data-filter="diaper" data-i18n="filterDiaper">
+
+        💩 Windel
+
+    </button>
+
+    <button class="filterChip" data-filter="weight" data-i18n="filterWeight">
+
+        ⚖️ Gewicht
+
+    </button>
+
+    <button class="filterChip" data-filter="height" data-i18n="filterHeight">
+
+        📏 Größe
+
+    </button>
+
+</div>
+
+            <div class="timelineFilter dateRangeFilter" id="dateRangeFilter">
+
+                <button class="filterChip active" data-range="all" data-i18n="filterAll">
+                    Alle
+                </button>
+
+                <button class="filterChip" data-range="today" data-i18n="dateRangeToday">
+                    Heute
+                </button>
+
+                <button class="filterChip" data-range="7d" data-i18n="dateRangeWeek">
+                    7 Tage
+                </button>
+
+                <button class="filterChip" data-range="30d" data-i18n="dateRangeMonth">
+                    30 Tage
+                </button>
+
+                <button class="filterChip" data-range="custom" data-i18n="dateRangeCustom">
+                    Zeitraum
+                </button>
+
+            </div>
+
+            <div id="customDateRange" class="customDateRange hidden">
+
+                <div class="field">
+
+                    <label for="dateFrom" data-i18n="dateFromLabel">Von</label>
+
+                    <input id="dateFrom" type="date">
+
+                </div>
+
+                <div class="field">
+
+                    <label for="dateTo" data-i18n="dateToLabel">Bis</label>
+
+                    <input id="dateTo" type="date">
+
+                </div>
+
+                <button
+                    id="applyDateRange"
+                    class="secondaryButton"
+                    type="button"
+                    data-i18n="applyRangeButton">
+
+                    Anwenden
+
+                </button>
+
+            </div>
+
+            <div
+
+                id="timeline"
+
+                class="timeline"
+
+            >
+
+                <!-- JavaScript -->
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <section id="statisticsPage" class="container hidden">
+
+    <div class="sectionHeader">
+
+        <h2 data-i18n="statsPageTitle">Statistik</h2>
+
+        <p data-i18n="statsPageSubtitle">Kleine Übersicht</p>
+
+    </div>
+
+    <div class="statsGrid">
+
+        <article class="statCard">
+
+            <span class="statEmoji">😴</span>
+
+            <strong id="statsSleepAverage">—</strong>
+
+            <span class="statLabel" data-i18n="statAvgSleepPerDay">
+                Ø Schlaf / Tag
+            </span>
+
+        </article>
+
+        <article class="statCard">
+
+            <span class="statEmoji">🍼</span>
+
+            <strong id="statsBottleAverage">—</strong>
+
+            <span class="statLabel" data-i18n="statAvgBottlePerDay">
+                Ø Flasche / Tag
+            </span>
+
+        </article>
+
+        <article class="statCard">
+
+            <span class="statEmoji">⚖️</span>
+
+            <strong id="statsWeight">—</strong>
+
+            <span class="statLabel" data-i18n="statLastWeight">
+                Letztes Gewicht
+            </span>
+
+        </article>
+
+        <article class="statCard">
+
+            <span class="statEmoji">📏</span>
+
+            <strong id="statsHeight">—</strong>
+
+            <span class="statLabel" data-i18n="statLastHeight">
+                Letzte Größe
+            </span>
+
+        </article>
+
+    </div>
+
+    <!-- ======================================
+         SCHLAF
+    ======================================= -->
+
+    <article class="statBlock">
+
+        <div class="statBlockHeader">
+
+            <span class="statBlockIcon">😴</span>
+
+            <h3 data-i18n="categorySleep">Schlaf</h3>
+
+        </div>
+
+        <div class="statMetricsRow">
+
+            <div class="statMetric">
+                <strong id="sleepAvg">—</strong>
+                <span data-i18n="statAverage">Durchschnitt</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="sleepAvg7">—</strong>
+                <span data-i18n="statLast7Days">Letzte 7 Tage</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="sleepAvg30">—</strong>
+                <span data-i18n="statLast30Days">Letzte 30 Tage</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="sleepLongest">—</strong>
+                <span data-i18n="statLongestSleep">Längster Schlaf</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="sleepShortest">—</strong>
+                <span data-i18n="statShortestSleep">Kürzester Schlaf</span>
+            </div>
+
+        </div>
+
+        <div class="statChartWrap" id="sleepChart"></div>
+
+    </article>
+
+    <!-- ======================================
+         FLASCHE
+    ======================================= -->
+
+    <article class="statBlock">
+
+        <div class="statBlockHeader">
+
+            <span class="statBlockIcon">🍼</span>
+
+            <h3 data-i18n="categoryBottle">Flasche</h3>
+
+        </div>
+
+        <div class="statMetricsRow">
+
+            <div class="statMetric">
+                <strong id="bottleAvgDay">—</strong>
+                <span data-i18n="statDailyAverage">Tagesdurchschnitt</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="bottleWeekTotal">—</strong>
+                <span data-i18n="statWeekOverview">Wochenübersicht</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="bottleMonthTotal">—</strong>
+                <span data-i18n="statMonthOverview">Monatsübersicht</span>
+            </div>
+
+        </div>
+
+        <div class="statChartWrap" id="bottleChart"></div>
+
+    </article>
+
+    <!-- ======================================
+         STILLEN
+    ======================================= -->
+
+    <article class="statBlock">
+
+        <div class="statBlockHeader">
+
+            <span class="statBlockIcon">🤱</span>
+
+            <h3 data-i18n="categoryBreastfeeding">Stillen</h3>
+
+        </div>
+
+        <div class="statMetricsRow">
+
+            <div class="statMetric">
+                <strong id="breastAvgDuration">—</strong>
+                <span data-i18n="statAvgDuration">Ø Dauer</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="breastSessionsCount">—</strong>
+                <span data-i18n="statSessionsCount">Anzahl</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="breastTotalMinutes">—</strong>
+                <span data-i18n="statTotalMinutes">Minuten gesamt</span>
+            </div>
+
+        </div>
+
+        <div id="breastRatio"></div>
+
+        <div class="ratioLegend" id="breastRatioLegend"></div>
+
+        <div class="statChartWrap" id="breastChart"></div>
+
+    </article>
+
+    <!-- ======================================
+         WINDELN
+    ======================================= -->
+
+    <article class="statBlock">
+
+        <div class="statBlockHeader">
+
+            <span class="statBlockIcon">💩</span>
+
+            <h3 data-i18n="categoryDiaper">Windel</h3>
+
+        </div>
+
+        <div class="statMetricsRow">
+
+            <div class="statMetric">
+                <strong id="diaperCount30">—</strong>
+                <span data-i18n="statDiaperCount">Anzahl (30 Tage)</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="diaperAvgDay">—</strong>
+                <span data-i18n="statDiaperAvgPerDay">Ø pro Tag</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="diaperWetCount">—</strong>
+                <span data-i18n="diaperPee">Pipi</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="diaperSolidCount">—</strong>
+                <span data-i18n="diaperPoo">Stuhl</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="diaperBothCount">—</strong>
+                <span data-i18n="diaperBoth">Pipi + Stuhl</span>
+            </div>
+
+        </div>
+
+    </article>
+
+    <!-- ======================================
+         GEWICHT
+    ======================================= -->
+
+    <article class="statBlock">
+
+        <div class="statBlockHeader">
+
+            <span class="statBlockIcon">⚖️</span>
+
+            <h3 data-i18n="categoryWeight">Gewicht</h3>
+
+        </div>
+
+        <div class="statMetricsRow">
+
+            <div class="statMetric">
+                <strong id="weightChange">—</strong>
+                <span data-i18n="statWeightChange">Veränderung</span>
+            </div>
+
+            <div class="statMetric">
+                <strong id="weightGrowth">—</strong>
+                <span data-i18n="statGrowthSinceFirst">Wachstum</span>
+            </div>
+
+        </div>
+
+        <div class="statChartWrap" id="weightChart"></div>
+
+    </article>
+
+    <!-- ======================================
+         GRÖSSE
+    ======================================= -->
+
+    <article class="statBlock">
+
+        <div class="statBlockHeader">
+
+            <span class="statBlockIcon">📏</span>
+
+            <h3 data-i18n="categoryHeight">Größe</h3>
+
+        </div>
+
+        <div class="statMetricsRow">
+
+            <div class="statMetric">
+                <strong id="heightGrowth">—</strong>
+                <span data-i18n="statGrowthSinceFirst">Wachstum</span>
+            </div>
+
+        </div>
+
+        <div class="statChartWrap" id="heightChart"></div>
+
+    </article>
+
+</section>
+<section id="settingsPage" class="container hidden">
+
+    <div class="sectionHeader">
+
+        <h2 data-i18n="settingsTitle">Einstellungen</h2>
+
+        <p data-i18n="settingsSubtitle">App & Daten</p>
+
+    </div>
+
+    <div class="card">
+
+        <h3 data-i18n="settingsLanguageTitle">Sprache</h3>
+
+        <p data-i18n="settingsLanguageText">Wähle die Sprache der App.</p>
+
+        <div class="langSwitcher settingsLangSwitcher" id="settingsLangSwitcher">
+
+            <button type="button" class="langChip" data-lang="de">
+                Deutsch
+            </button>
+
+            <button type="button" class="langChip" data-lang="en">
+                English
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3 data-i18n="settingsAppearanceTitle">Darstellung</h3>
+
+        <p data-i18n="settingsAppearanceText">Zwischen hellem und dunklem Design wechseln.</p>
+
+        <button
+            id="toggleTheme"
+            class="primaryButton"
+            type="button"
+            data-i18n="toggleThemeButton">
+
+            🌙 Dark Mode umschalten
+
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h3 data-i18n="settingsBackupTitle">Datensicherung</h3>
+
+        <p data-i18n="settingsBackupText">Alle Einträge lokal sichern oder wiederherstellen.</p>
+
+        <button
+            id="exportData"
+            class="secondaryButton"
+            type="button"
+            data-i18n="exportDataButton">
+
+            💾 Daten exportieren
+
+        </button>
+
+        <button
+    id="exportCsvButton"
+    class="secondaryButton"
+    type="button"
+    data-i18n="exportCsvButton">
+
+    📊 CSV exportieren
+
+</button>
+
+
+        <button
+            id="importData"
+            class="secondaryButton"
+            type="button"
+            data-i18n="importDataButton">
+
+            📂 Daten importieren
+
+        </button>
+
+        <input
+            id="importFile"
+            type="file"
+            accept=".json"
+            hidden>
+
+    </div>
+
+    <div class="card">
+
+        <h3 data-i18n="settingsResetTitle">Zurücksetzen</h3>
+
+        <p data-i18n="settingsResetText">Alle gespeicherten Daten werden dauerhaft gelöscht.</p>
+
+        <button
+            id="resetData"
+            class="secondaryButton danger"
+            type="button"
+            data-i18n="resetDataButton">
+
+            🗑️ Alle Daten löschen
+
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h3 data-i18n="settingsAboutTitle">Über</h3>
+
+        <p><strong>Baby Companion</strong></p>
+
+        <p id="appVersion">Version 1.0</p>
+
+        <p data-i18n="aboutTagline">Offline Baby Tracker</p>
+
+    </div>
+
+</section>
+            <!-- ======================================
+             FLOATING ACTION BUTTON
+        ======================================= -->
+
+        <button
+
+            id="fabButton"
+
+            class="fab"
+
+            type="button"
+
+            aria-label="Neuen Eintrag hinzufügen"
+
+            data-i18n-aria-label="fabAriaLabel"
+
+        >
+
+            +
+
+        </button>
+
+        <!-- ======================================
+             BOTTOM NAVIGATION
+        ======================================= -->
+
+        <nav class="bottomNavigation">
+
+            <button
+
+                id="navHome"
+
+                class="navItem active"
+
+                type="button"
+
+
+
+            >
+
+                <span>🏠</span>
+
+                <small data-i18n="navHomeLabel">Home</small>
+
+            </button>
+
+            <button
+
+                id="navStats"
+
+                class="navItem"
+
+                type="button"
+
+
+
+            >
+
+                <span>📊</span>
+
+                <small data-i18n="navStatsLabel">Statistik</small>
+
+            </button>
+
+            <button
+
+                id="navTimeline"
+
+                 class="navItem"
+
+                type="button"
+
+
+            >
+
+                <span>📝</span>
+
+                <small data-i18n="navTimelineLabel">Verlauf</small>
+
+            </button>
+
+            <button
+
+                id="navSettings"
+
+                class="navItem"
+
+                type="button"
+
+            >
+
+                <span>⚙️</span>
+
+                <small data-i18n="navSettingsLabel">Einstellungen</small>
+
+            </button>
+
+        </nav>
+
+</section>
+
+<!-- ==========================================
+     ENTRY MODAL
+========================================== -->
+
+<div
+    id="entryModal"
+    class="modalOverlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="modalHeader">
+
+            <h2 id="modalTitle" data-i18n="modalNewEntryTitle">
+
+                Neuer Eintrag
+
+            </h2>
+
+            <button
+
+                id="closeModal"
+
+                class="iconButton"
+
+                type="button"
+
+                aria-label="Schließen"
+
+                data-i18n-aria-label="closeAriaLabel"
+
+            >
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <form id="entryForm">
+
+            <div class="field">
+
+                <label for="entryType" data-i18n="labelCategory">
+
+                    Kategorie
+
+                </label>
+
+                <select id="entryType">
+
+                    <option value="sleep" data-i18n="catOptSleep">
+
+                        😴 Schlaf
+
+                    </option>
+
+                    <option value="breastfeeding" data-i18n="catOptBreastfeeding">
+
+                        🤱 Stillen
+
+                    </option>
+
+                    <option value="bottle" data-i18n="catOptBottle">
+
+                        🍼 Flasche
+
+                    </option>
+
+                    <option value="diaper" data-i18n="catOptDiaper">
+
+                        💩 Windel
+
+                    </option>
+
+                    <option value="weight" data-i18n="catOptWeight">
+
+                        ⚖️ Gewicht
+
+                    </option>
+
+                    <option value="height" data-i18n="catOptHeight">
+
+                        📏 Größe
+
+                    </option>
+
+                    <option value="note" data-i18n="catOptNote">
+
+                        📝 Notiz
+
+                    </option>
+
+                </select>
+
+            </div>
+                        <!-- ======================================
+                 DYNAMISCHE FELDER
+            ======================================= -->
+
+            <div
+
+                id="dynamicFields"
+
+            >
+
+                <!-- Wird durch JavaScript erzeugt -->
+
+            </div>
+
+            <div class="field">
+
+                <label for="entryNote" data-i18n="labelNote">
+
+                    Notiz
+
+                </label>
+
+                <textarea
+
+                    id="entryNote"
+
+                    rows="4"
+
+                    placeholder="Optionale Notiz..."
+
+                    data-i18n-placeholder="notePlaceholder"
+
+                ></textarea>
+
+            </div>
+
+            <div class="modalActions">
+
+    <button
+        type="submit"
+        class="primaryButton"
+        data-i18n="saveButton">
+
+        Speichern
+
+    </button>
+
+    <button
+        id="cancelButton"
+        type="button"
+        class="secondaryButton"
+        data-i18n="cancelButton">
+
+        Abbrechen
+
+    </button>
+
+</div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     TOAST
+========================================== -->
+
+<div
+
+    id="toast"
+
+    class="toast hidden"
+
+>
+
+    Eintrag gespeichert.
+
+</div>
+<!-- ==========================================
+     APP OVERLAYS
+========================================== -->
+
+<div
+
+    id="loadingOverlay"
+
+    class="loadingOverlay hidden"
+
+>
+
+    <div class="loadingSpinner"></div>
+
+</div>
+
+<!-- ==========================================
+     APP SCRIPT
+========================================== -->
+<!-- ==========================================
+     LICENSE ACTIVATION
+========================================== -->
+
+<div
+    id="licenseOverlay"
+    class="licenseOverlay hidden"
+>
+
+    <div class="licenseCard">
+
+        <p class="langSwitcherLabel" data-i18n="chooseLanguageLabel">
+            Sprache wählen
+        </p>
+
+        <div class="langSwitcher" id="licenseLangSwitcher">
+
+            <button type="button" class="langChip" data-lang="de">
+                Deutsch
+            </button>
+
+            <button type="button" class="langChip" data-lang="en">
+                English
+            </button>
+
+        </div>
+
+        <div class="licenseIcon">
+            👶
+        </div>
+
+        <h2>Baby Companion</h2>
+
+        <p
+            id="licenseIntro"
+            data-i18n-html="licenseIntro"
+        >
+
+            Vielen Dank für deinen Kauf.
+
+            <br><br>
+
+            Bitte gib deinen Aktivierungscode ein.
+
+        </p>
+
+        <input
+            id="licenseInput"
+            type="text"
+            placeholder="Aktivierungscode"
+            data-i18n-placeholder="licensePlaceholder"
+            autocomplete="off"
+        >
+
+        <button
+            id="activateButton"
+            class="primaryButton"
+            type="button"
+            data-i18n="licenseActivateButton"
+        >
+
+            Aktivieren
+
+        </button>
+
+        <p
+            id="licenseError"
+            class="licenseError hidden"
+            data-i18n="licenseErrorText"
+        >
+
+            Ungültiger Aktivierungscode.
+
+        </p>
+
+    </div>
+
+</div>
+<script src="app.js"></script>
+
+</body>
+
+</html>
